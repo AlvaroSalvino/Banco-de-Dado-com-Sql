@@ -1,7 +1,7 @@
 import sqlalchemy as sqlA
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, Session
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column
+from sqlalchemy import Column, select
 from sqlalchemy import inspect
 from sqlalchemy import create_engine
 from sqlalchemy import Integer
@@ -34,7 +34,7 @@ class Address(Base):
     user = relationship("User", back_populates="address")
 
     def __repr__(self):
-        return f"Address (id={self.id}, email ={self.email_address})"
+        return f"Address (id={self.id}, email_address={self.email_address})"
 
 
 print(User.__tablename__)
@@ -53,6 +53,36 @@ Base.metadata.create_all(engine)
 # Investiga o esquema de banco de dados
 inspetor_engine = inspect(engine)
 print(inspetor_engine.has_table("user_account"))
-
 print(inspetor_engine.get_table_names())
 print(inspetor_engine.default_schema_name)
+
+with Session(engine) as session:
+    alvaro = User(
+        name='alvaro',
+        fullname='alvaro da Silva Salvino',
+        address=[Address(email_address='alvaro.salvino@gmail.com')]
+    )
+
+    sandy = User(
+        name='Sandy',
+        fullname='Sandy Albuquerque',
+        address=[Address(email_address='Sandy@email.com'),
+                 Address(email_address='Sandygatinha@gostosa.com')]
+    )
+
+    patrick = User(name='patrick', fullname='patrick salvino')
+
+# Enviando para o Banco de Dados (Persistência de dados)
+    session.add_all([alvaro, sandy, patrick])
+
+    session.commit()
+
+stmt = select(User).where(User.name.in_(['alvaro']))
+print('Recuperando usuários a partir de condição de filtragem')
+for user in session.scalars(stmt):
+    print(user)
+
+stmt_address = select(Address).where(Address.user_id.in_([2]))
+print('\nRecuperando os endereços de email de Sandy')
+for stmt_address in session.scalars(stmt_address):
+    print(stmt_address)
