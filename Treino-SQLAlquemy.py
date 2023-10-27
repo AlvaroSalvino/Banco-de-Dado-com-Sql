@@ -1,7 +1,9 @@
-import sqlalchemy
+import sqlalchemy as sqlA
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column
+from sqlalchemy import inspect
+from sqlalchemy import create_engine
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import ForeignKey
@@ -36,4 +38,21 @@ class Address(Base):
 
 
 print(User.__tablename__)
-print(User.__table__)
+print(User.address)
+
+
+# conexão com o banco de dados
+engine = create_engine("sqlite://")
+
+# Criando as classes como tabelas no banco de dados
+Base.metadata.create_all(engine)
+
+# Depreciado - Foi removido no em release
+# print(engine.table_names())
+
+# Investiga o esquema de banco de dados
+inspetor_engine = inspect(engine)
+print(inspetor_engine.has_table("user_account"))
+
+print(inspetor_engine.get_table_names())
+print(inspetor_engine.default_schema_name)
