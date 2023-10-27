@@ -86,3 +86,16 @@ stmt_address = select(Address).where(Address.user_id.in_([2]))
 print('\nRecuperando os endereços de email de Sandy')
 for stmt_address in session.scalars(stmt_address):
     print(stmt_address)
+
+stmt_order = select(User).order_by(User.fullname.desc())
+print('Recuperando info de maneira ordenada')
+for result in session.scalars(stmt_order):
+    print(result)
+
+stmt_join = select(User.fullname, Address.email_address).join_from(Address, User)
+for result in session.scalars(stmt_join):
+    print(result)
+
+# print(select(User.fullname, Address.email_address).join_from(Address, User))
+
+connection = 
