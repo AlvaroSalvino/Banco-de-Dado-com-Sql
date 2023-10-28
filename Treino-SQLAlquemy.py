@@ -1,7 +1,7 @@
 import sqlalchemy as sqlA
 from sqlalchemy.orm import declarative_base, Session
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, select
+from sqlalchemy import Column, select, func
 from sqlalchemy import inspect
 from sqlalchemy import create_engine
 from sqlalchemy import Integer
@@ -98,4 +98,13 @@ for result in session.scalars(stmt_join):
 
 # print(select(User.fullname, Address.email_address).join_from(Address, User))
 
-connection = 
+connection = engine.connect()
+results = connection.execute(stmt_join).fetchall()
+print('\nExecutando statement a partir da connection')
+for result in results:
+    print(result)
+
+stmt_count = select(func.count('*')).select_from(User)
+print('\nTotal de instâncias em User')
+for result in session.scalars(stmt_count):
+    print(result)
