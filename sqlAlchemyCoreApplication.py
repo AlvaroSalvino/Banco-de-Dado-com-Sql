@@ -26,4 +26,15 @@ user_prefs = Table(
 
 for table in metadata_obj.sorted_tables:
     print(table)
-    
+
+metadata_db_obj = MetaData(schema='bank')
+financial_info = Table(
+    'financial_info',
+    metadata_db_obj,
+    Column('id', Integer, primary_key=True),
+    Column('value', String(100), nullable=False)
+)
+
+print('Info da tabela financial_info')
+print(financial_info.primary_key)
+print(financial_info.constraints)
