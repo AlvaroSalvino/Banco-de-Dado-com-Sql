@@ -1,4 +1,3 @@
-import sqlalchemy
 from sqlalchemy import create_engine, MetaData, Table, text
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -60,6 +59,4 @@ sql = text('select * from user')
 result = engine.execute(sql)
 for row in result:
     print(row)
-
-
 
