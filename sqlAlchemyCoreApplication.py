@@ -24,6 +24,13 @@ user_prefs = Table(
     Column('pref_value', String(100))
 )
 
+print('\nInfo da tabela users')
+print(user_prefs.primary_key)
+print(user_prefs.constraints)
+
+print(metadata_obj.tables)
+
+
 for table in metadata_obj.sorted_tables:
     print(table)
 
@@ -35,6 +42,7 @@ financial_info = Table(
     Column('value', String(100), nullable=False)
 )
 
-print('Info da tabela financial_info')
+print('\nInfo da tabela financial_info')
 print(financial_info.primary_key)
 print(financial_info.constraints)
+
