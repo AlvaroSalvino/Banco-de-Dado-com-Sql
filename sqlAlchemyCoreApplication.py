@@ -3,6 +3,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import ForeignKey
+from sqlalchemy import inspect
 
 
 engine = create_engine('sqlite://')
@@ -52,8 +53,8 @@ print(financial_info.constraints)
 
 print('\nExecutando Statement sql')
 sql = text('select * from user')
-
-result = engine.execute(sql)
+with engine.connect() as conn:
+    result = conn.execute(sql)
 for row in result:
     print(row)
 ''' metadata_obj,
@@ -64,4 +65,5 @@ for row in result:
 '''
 
 sql_insert = text("Insert into user values(1, 'patrick', 'alvaro.salvino@gmail.com', 'AS')")
-engine.execute(sql_insert)
+with engine.connect() as conn:
+    result = conn.execute(sql_insert)
